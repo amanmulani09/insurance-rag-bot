@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
 
-
 class ChatRequest(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 

@@ -41,3 +41,8 @@ CHAT_MODEL = os.getenv("GROQ_MODEL", os.getenv("CHAT_MODEL", "llama-3.1-8b-insta
 RETRIEVAL_K = int(os.getenv("RETRIEVAL_K", "4"))
 CHUNK_TOKENS = int(os.getenv("CHUNK_TOKENS", "450"))
 OVERLAP_TOKENS = int(os.getenv("OVERLAP_TOKENS", "80"))
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "*").split(",")
+    if origin.strip()
+]
