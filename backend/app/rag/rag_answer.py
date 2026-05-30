@@ -1,8 +1,17 @@
-import os
 import numpy as np
+from groq import Groq
+
+from app.core.config import CHAT_MODEL
 from app.rag.embed_store import embed_texts
 
-CHAT_MODEL = os.getenv("GROQ_MODEL", os.getenv("CHAT_MODEL", "llama-3.1-8b-instant"))
+_client: Groq | None = None
+
+
+def get_groq_client() -> Groq:
+    global _client
+    if _client is None:
+        _client = Groq()
+    return _client
 
 def embed_query(query: str) -> np.ndarray:
     return embed_texts([query])
@@ -18,9 +27,8 @@ def retrieve(query: str, index, chunks: list[str], k: int = 4) -> list[str]:
     return results
 
 def generate_answer(user_question: str, retrieved_chunks: list[str]) -> str:
-    from groq import Groq
 
-    client = Groq()
+    client = get_groq_client()
     context = "\n\n".join(retrieved_chunks)
     instructions = (
         "You are an Insurance Agency Customer Care assistant. "
