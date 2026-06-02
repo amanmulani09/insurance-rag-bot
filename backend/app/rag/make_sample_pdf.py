@@ -1,8 +1,16 @@
+from pathlib import Path
+
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
-def make_pdf(path="backend/data/knowledge.pdf"):
-    c = canvas.Canvas(path, pagesize=letter)
+DEFAULT_PDF_PATH = Path(__file__).resolve().parents[2] / "data" / "knowledge.pdf"
+
+
+def make_pdf(path: str | Path = DEFAULT_PDF_PATH):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    c = canvas.Canvas(str(path), pagesize=letter)
     text = c.beginText(40, 750)
     lines = [
     "Insurance Agency Customer Care Knowledge Base",
@@ -126,6 +134,7 @@ def make_pdf(path="backend/data/knowledge.pdf"):
     c.drawText(text)
     c.showPage()
     c.save()
+    print(f"Created sample PDF at {path}")
 
 if __name__ == "__main__":
     make_pdf()
