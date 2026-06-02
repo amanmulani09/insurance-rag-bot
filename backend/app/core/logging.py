@@ -8,3 +8,5 @@ def configure_logging() -> None:
         level=LOG_LEVEL,
         format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
     )
+    for logger_name in ("httpx", "httpcore", "huggingface_hub", "sentence_transformers"):
+        logging.getLogger(logger_name).setLevel(logging.WARNING)
