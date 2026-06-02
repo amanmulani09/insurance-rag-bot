@@ -1,7 +1,18 @@
+import logging
+
 import tiktoken
 from typing import List
 
+logger = logging.getLogger(__name__)
+
+
 def chunk_text(text: str, chunk_tokens: int = 450, overlap_tokens: int = 80) -> List[str]:
+    logger.info(
+        "Chunking started: text_chars=%s chunk_tokens=%s overlap_tokens=%s",
+        len(text),
+        chunk_tokens,
+        overlap_tokens,
+    )
     if chunk_tokens <= 0:
         raise ValueError("chunk_tokens must be greater than 0")
     if overlap_tokens < 0:
@@ -11,6 +22,7 @@ def chunk_text(text: str, chunk_tokens: int = 450, overlap_tokens: int = 80) -> 
 
     enc = tiktoken.get_encoding("cl100k_base")
     tokens = enc.encode(text)
+    logger.info("Text encoded: tokens=%s", len(tokens))
 
     chunks = []
     start = 0
@@ -21,4 +33,5 @@ def chunk_text(text: str, chunk_tokens: int = 450, overlap_tokens: int = 80) -> 
         start = end - overlap_tokens
         if start < 0:
             start = 0
+    logger.info("Chunking complete: chunks=%s", len(chunks))
     return chunks
